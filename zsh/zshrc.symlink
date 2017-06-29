@@ -40,6 +40,9 @@ done
 
 unset config_files
 
+# Open a new tab with same working directory
+precmd () {print -Pn "\e]2; %~/ \a"}
+
 # Better history
 # Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
 autoload -U up-line-or-beginning-search
