@@ -20,9 +20,9 @@ git_dirty() {
   else
     if [[ $($git status --porcelain) == "" ]]
     then
-      echo "on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
+      echo " on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
     else
-      echo "on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
+      echo " on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
     fi
   fi
 }
@@ -50,18 +50,32 @@ need_push () {
   fi
 }
 
+user_name() {
+  echo "%{$fg_bold[yellow]%}%n%{$reset_color%}"
+}
+
+machine_name() {
+  echo "%{$fg[white]%} at %{$reset_color%}%{$fg[yellow]%}%m%{$reset_color%}"
+}
+
 directory_name() {
-  echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
+  echo "%{$fg_bold[green]%}${PWD/#$HOME/~}%{$reset_color%}"
 }
 
-battery_status() {
-  if [[ $(sysctl -n hw.model) == *"Book"* ]]
-  then
-    $ZSH/bin/battery-status
-  fi
+smiley_result() {
+  echo "%(?,%{$fg[green]%}ツ%{$reset_color%},%{$fg[red]%}✗%{$reset_color%})"
 }
 
-export PROMPT=$'\n$(battery_status)in $(directory_name) $(git_dirty)$(need_push)\n› '
+directory_name() {
+  # echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
+  echo "%{$fg_bold[cyan]%}${PWD/#$HOME/~}%{$reset_color%}"
+}
+
+timep() {
+  echo "%{$fg[white]%}[%*]%{$reset_color%}"
+}
+
+export PROMPT=$'$(timep) $(smiley_result) $(directory_name)$(git_dirty)$(need_push) › '
 set_prompt () {
   export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
 }
